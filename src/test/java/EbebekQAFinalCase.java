@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DenemeTest {
+public class EbebekQAFinalCase {
     private WebDriver driver;
     private Map<String, Object> vars;
     JavascriptExecutor js;
