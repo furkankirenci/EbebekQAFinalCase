@@ -32,55 +32,75 @@ public class EbebekQAFinalCase {
 
     @Test
     public void deneme() throws InterruptedException {
+        //Ebebek sitesine giriş
         driver.get("https://www.e-bebek.com/");
+        //Tarayıcıyı tam ekran yapma
         driver.manage().window().maximize();
+        //Arama kutusuna tıklama
         driver.findElement(By.id("txtSearchBox")).click();
-        Thread.sleep(2000);
+        //kutu açılana kadar bekleme
+        {
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(5000L));
+            wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".header__menu-search-content-buttons")));
+        }
+        //kutuya "kaşık maması" yazma
         driver.findElement(By.id("txtSearchBox")).sendKeys("kaşık maması");
-        Thread.sleep(2000);
+        //ENTER basma
         driver.findElement(By.id("txtSearchBox")).sendKeys(Keys.ENTER);
-        Thread.sleep(2000);
-        boolean isContinue = true;
+        //Sayfa yüklenene kadar bekleme
+        {
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(5000L));
+            wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("body > app-root > cx-storefront > main > cx-page-layout > cx-page-slot.SearchResultsListSlot.has-components.ng-star-inserted > eb-product-list > div > section > div > div > div > div.cx-product-container.row.ng-star-inserted > div > p")));
+        }
+
         int scroll = 1500;
-        while (isContinue) {
+        //Sayfada "Tükendi" butonu görene kadar sayfayı aşağı kaydırma
+        while (true) {
             try {
                 if (driver.findElement(By.cssSelector(".btn-buttonload")) != null) {
-                    System.out.println("YAKALANDIN");
                     break;
                 }
             } catch (Exception e) {
                 js.executeScript("window.scrollTo(0," + scroll + ")");
                 Thread.sleep(2000);
                 scroll += 1000;
-                System.out.println("SIKINTI YOK");
-                System.out.println("---------------------------");
             }
         }
-        js.executeScript("window.scrollTo(0," + scroll + ")");
-
-
-        Thread.sleep(5000);
-
+        //Sepete ekle butonlarını bulma ve bir List içine atma
         By mySelector = By.xpath("//button[.=\"Sepete Ekle\"]");
         List<WebElement> myElements = driver.findElements(mySelector);
-        int i = 0;
-        for (WebElement e : myElements) {
-            System.out.println(i++);
-        }
-
-        System.out.println(i);
-//      driver.findElement(By.xpath("(//button[@id='addToCartBtn'])[43]")).click();
-        Thread.sleep(5000);
-//        driver.findElement(By.cssSelector(".col-6:nth-child(43) .product-item-anchor .product-item-content")).click();
-        driver.findElement(By.xpath("/html/body/app-root/cx-storefront/main/cx-page-layout/cx-page-slot[3]/eb-product-list/div/section/div/div/div/div[2]/eb-product-scroll/div/div/eb-product-list-item[43]/div/eb-generic-link/a/div/div[2]/span")).click();
-        System.out.println("as");
+        //List'in boyutunu alma
+        int i = myElements.size();
+        //İmleci son ürünün üzerine götürme
+        WebElement element = driver.findElement(By.cssSelector(".col-6:nth-child(" + i + ") .product-item-anchor .product-item-content"));
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+        Thread.sleep(1000);
+        //Son ürüne tıklama
+        driver.findElement(By.cssSelector(".col-6:nth-child(" + i + ") .product-item-anchor .product-item-content")).click();
+        //Açılan sayfada Sepete ekle butonu görünene kadar bekleme
         {
             WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(5000L));
-            wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("addToCartBtn")));
+            wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".ng-star-inserted:nth-child(4) > .ng-untouched > #addToCartBtn")));
         }
-        Thread.sleep(5000);
+        //Sepete ekle butonuna tıklama
         driver.findElement(By.id("addToCartBtn")).click();
-        Thread.sleep(50000);
+        //Sepeti gör butonuna kadar bekleme
+        {
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(5000L));
+            wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#btnShowCart")));
+        }
+        Thread.sleep(500);
+        //Sepeti gör butonuna tıklama
+        driver.findElement(By.cssSelector("#btnShowCart")).click();
+        //Alışverişi Tamamla butonunu görene kadar bekleme
+        {
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(5000L));
+            wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#btnGoToShippingAddress > .ng-star-inserted")));
+        }
+        //Alışverişi tamamla butonuna tıklama
+        driver.findElement(By.cssSelector("#btnGoToShippingAddress > .ng-star-inserted")).click();
+
+        Thread.sleep(5000);
 
     }
 }
