@@ -24,13 +24,6 @@ Proje Java programlama dilinde yazılmalıdır. Maven repo kullanılmalıdır.
 <a href="https://www.java.com/" target="_blank"><img src="https://github.com/furkankirenci/ebebekFinalCase/blob/main/images/Java_programming_language_logo.svg.png" alt="Java" height="80" /></a>
 
 
-
-
-<!-- OUTPUT SCREENSHOTS -->
-### Output Screenshots
-<!--CHANGE ONLY SRC -NOTHING ELSE -->
-<img src="https://github.com/furkankirenci/ebebekFinalCase/blob/main/images/output.png" alt="selection-sort" />
-
 <!-- CONTACT -->
 ## Contact
 
